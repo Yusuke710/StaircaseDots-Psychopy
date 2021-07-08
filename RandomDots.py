@@ -1,8 +1,8 @@
-﻿#!/usr/bin/env python
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
 This experiment was created using PsychoPy3 Experiment Builder (v2021.2.0),
-    on July 08, 2021, at 15:54
+    on July 08, 2021, at 16:26
 If you publish work using this script the most relevant publication is:
 
     Peirce J, Gray JR, Simpson S, MacAskill M, Höchenberger R, Sogo H, Kastman E, Lindeløv JK. (2019) 
@@ -96,14 +96,7 @@ key_resp = keyboard.Keyboard()
 
 # Initialize components for Routine "trial"
 trialClock = core.Clock()
-image = visual.ImageStim(
-    win=win,
-    name='image', 
-    image='data/1(6).jpg', mask=None,
-    ori=0.0, pos=(0, 0), size=(0.5, 0.5),
-    color=[1,1,1], colorSpace='rgb', opacity=None,
-    flipHoriz=False, flipVert=False,
-    texRes=128.0, interpolate=True, depth=0.0)
+
 
 # Initialize components for Routine "survey1_3"
 survey1_3Clock = core.Clock()
@@ -115,7 +108,7 @@ survey1 = visual.TextStim(win=win, name='survey1',
     languageStyle='LTR',
     depth=0.0);
 textbox = visual.TextBox2(
-     win, text='\n\n', font='Open Sans',
+     win, text='', font='Open Sans',
      pos=(0, 0),     letterHeight=0.05,
      size=(None, None), borderWidth=2.0,
      color='white', colorSpace='rgb',
@@ -231,20 +224,22 @@ while continueRoutine:
 for thisComponent in InstructionComponents:
     if hasattr(thisComponent, "setAutoDraw"):
         thisComponent.setAutoDraw(False)
-thisExp.addData('text.started', text.tStartRefresh)
-thisExp.addData('text.stopped', text.tStopRefresh)
-# check responses
-if key_resp.keys in ['', [], None]:  # No response was made
-    key_resp.keys = None
-thisExp.addData('key_resp.keys',key_resp.keys)
-if key_resp.keys != None:  # we had a response
-    thisExp.addData('key_resp.rt', key_resp.rt)
-thisExp.nextEntry()
 # the Routine "Instruction" was not non-slip safe, so reset the non-slip timer
 routineTimer.reset()
 
+#Yusuke editting this 
+from os import listdir
+from os.path import isfile, join
+mypath = 'data'
+files = [f for f in listdir(mypath) if isfile(join(mypath, f))]
+print(files)
+
+# Initialize components for Routine "trial"
+trialClock = core.Clock()
+
 # set up handler to look after randomisation of conditions etc
-trials = data.TrialHandler(nReps=5.0, method='random', 
+#yusuke editting this
+trials = data.TrialHandler(nReps=len(files)-1, #method='random', 
     extraInfo=expInfo, originPath=-1,
     trialList=[None],
     seed=None, name='trials')
@@ -255,7 +250,21 @@ if thisTrial != None:
     for paramName in thisTrial:
         exec('{} = thisTrial[paramName]'.format(paramName))
 
+i = 0
 for thisTrial in trials:
+    print(i)
+    #yusue editting this 
+    image = visual.ImageStim(
+    win=win,
+    name='image', 
+    image= 'data/' + files[i], mask=None,
+    ori=0.0, pos=(0, 0), size=(0.5, 0.5),
+    color=[1,1,1], colorSpace='rgb', opacity=None,
+    flipHoriz=False, flipVert=False,
+    texRes=128.0, interpolate=True, depth=0.0)
+    
+
+    
     currentLoop = trials
     # abbreviate parameter names if possible (e.g. rgb = thisTrial.rgb)
     if thisTrial != None:
@@ -263,6 +272,11 @@ for thisTrial in trials:
             exec('{} = thisTrial[paramName]'.format(paramName))
     
     # ------Prepare to start Routine "trial"-------
+    
+    #yusuke editting this 
+    
+    
+    
     continueRoutine = True
     routineTimer.add(2.000000)
     # update component parameters for each repeat
@@ -328,8 +342,6 @@ for thisTrial in trials:
     for thisComponent in trialComponents:
         if hasattr(thisComponent, "setAutoDraw"):
             thisComponent.setAutoDraw(False)
-    trials.addData('image.started', image.tStartRefresh)
-    trials.addData('image.stopped', image.tStopRefresh)
     
     # ------Prepare to start Routine "survey1_3"-------
     continueRoutine = True
@@ -424,23 +436,23 @@ for thisTrial in trials:
     for thisComponent in survey1_3Components:
         if hasattr(thisComponent, "setAutoDraw"):
             thisComponent.setAutoDraw(False)
-    trials.addData('survey1.started', survey1.tStartRefresh)
-    trials.addData('survey1.stopped', survey1.tStopRefresh)
     trials.addData('textbox.text',textbox.text)
     trials.addData('textbox.started', textbox.tStartRefresh)
     trials.addData('textbox.stopped', textbox.tStopRefresh)
-    trials.addData('button.numClicks', button.numClicks)
-    if button.numClicks:
-       trials.addData('button.timesOn', button.timesOn)
-       trials.addData('button.timesOff', button.timesOff)
-    else:
-       trials.addData('button.timesOn', "")
-       trials.addData('button.timesOff', "")
     # the Routine "survey1_3" was not non-slip safe, so reset the non-slip timer
     routineTimer.reset()
     thisExp.nextEntry()
     
-# completed 5.0 repeats of 'trials'
+    filename = files[i].rsplit('.',1)[0]
+    if textbox.text == filename:
+        if i < len(files) -2:
+            i = i + 1
+    else:
+        if i > 0:
+            i = i -1
+difficulty = [1,2,4,8,16,32,64,128]
+print(difficulty[i])
+# completed a loop of repeats of 'trials'
 
 
 # Flip one final time so any remaining win.callOnFlip() 
