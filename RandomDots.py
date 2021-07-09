@@ -42,8 +42,8 @@ dlg = gui.DlgFromDict(dictionary=expInfo, sortKeys=False, title=expName)
 if dlg.OK == False:
     core.quit()  # user pressed cancel
 expInfo['date'] = data.getDateStr()  # add a simple timestamp
-expInfo['expName'] = expName
-expInfo['psychopyVersion'] = psychopyVersion
+#expInfo['expName'] = expName
+#expInfo['psychopyVersion'] = psychopyVersion
 
 # Data file name stem = absolute path + name; later add .psyexp, .csv, .log, etc
 filename = _thisDir + os.sep + u'data/%s_%s_%s' % (expInfo['participant'], expName, expInfo['date'])
@@ -51,11 +51,12 @@ filename = _thisDir + os.sep + u'data/%s_%s_%s' % (expInfo['participant'], expNa
 # An ExperimentHandler isn't essential but helps with data saving
 thisExp = data.ExperimentHandler(name=expName, version='',
     extraInfo=expInfo, runtimeInfo=None,
+    #originPath='C:\\Users\\Yusuke\\Desktop\\TlabWinter2021\\result',
     originPath='C:\\Users\\Yusuke\\Desktop\\TlabWinter2021\\RandomDots.py',
     savePickle=True, saveWideText=True,
     dataFileName=filename)
 # save a log file for detail verbose info
-logFile = logging.LogFile(filename+'.log', level=logging.EXP)
+#logFile = logging.LogFile(filename+'.log', level=logging.EXP)
 logging.console.setLevel(logging.WARNING)  # this outputs to the screen, not a file
 
 endExpNow = False  # flag for 'escape' or other condition => quit the exp
@@ -103,7 +104,7 @@ survey1_3Clock = core.Clock()
 survey1 = visual.TextStim(win=win, name='survey1',
     text='How many dots dit you see?',
     font='Open Sans',
-    pos=(0, 0), height=0.1, wrapWidth=None, ori=0.0, 
+    pos=(0, 0.4), height=0.1, wrapWidth=None, ori=0.0, 
     color='white', colorSpace='rgb', opacity=None, 
     languageStyle='LTR',
     depth=0.0);
@@ -125,7 +126,7 @@ textbox = visual.TextBox2(
 )
 button = visual.ButtonStim(win, 
     text='Next trial', font='Arvo',
-    pos=(0, 0),
+    pos=(0, -0.3),
     letterHeight=0.05,
     size=None, borderWidth=0.0,
     fillColor='darkgrey', borderColor=None,
@@ -133,7 +134,7 @@ button = visual.ButtonStim(win,
     opacity=None,
     bold=True, italic=False,
     padding=None,
-    anchor='bottom-right',
+    anchor='center',
     name='button'
 )
 button.buttonClock = core.Clock()
@@ -239,7 +240,7 @@ trialClock = core.Clock()
 
 # set up handler to look after randomisation of conditions etc
 #yusuke editting this
-trials = data.TrialHandler(nReps=len(files)-1, #method='random', 
+trials = data.TrialHandler(nReps=len(files), #method='random', 
     extraInfo=expInfo, originPath=-1,
     trialList=[None],
     seed=None, name='trials')
@@ -443,9 +444,9 @@ for thisTrial in trials:
     routineTimer.reset()
     thisExp.nextEntry()
     
-    filename = files[i].rsplit('.',1)[0]
-    if textbox.text == filename:
-        if i < len(files) -2:
+    name = files[i].rsplit('.',1)[0]
+    if textbox.text == name:
+        if i < len(files) -1:
             i = i + 1
     else:
         if i > 0:
