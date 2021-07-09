@@ -46,14 +46,14 @@ expInfo['date'] = data.getDateStr()  # add a simple timestamp
 #expInfo['psychopyVersion'] = psychopyVersion
 
 # Data file name stem = absolute path + name; later add .psyexp, .csv, .log, etc
-filename = _thisDir + os.sep + u'data/%s_%s_%s' % (expInfo['participant'], expName, expInfo['date'])
+filename = _thisDir + os.sep + u'result/%s_%s_%s' % (expInfo['participant'], expName, expInfo['date']) #save to /result
 
 # An ExperimentHandler isn't essential but helps with data saving
 thisExp = data.ExperimentHandler(name=expName, version='',
     extraInfo=expInfo, runtimeInfo=None,
-    #originPath='C:\\Users\\Yusuke\\Desktop\\TlabWinter2021\\result',
+    #originPath='C:\\Users\\Yusuke\\Desktop\\TlabWinter2021\\result\\',
     originPath='C:\\Users\\Yusuke\\Desktop\\TlabWinter2021\\RandomDots.py',
-    savePickle=True, saveWideText=True,
+    savePickle=False, saveWideText=True,
     dataFileName=filename)
 # save a log file for detail verbose info
 #logFile = logging.LogFile(filename+'.log', level=logging.EXP)
@@ -66,9 +66,9 @@ frameTolerance = 0.001  # how close to onset before 'same' frame
 
 # Setup the Window
 win = visual.Window(
-    size=(1024, 768), fullscr=True, screen=0, 
+    size=(1800, 1200), fullscr=True, screen=0, 
     winType='pyglet', allowGUI=False, allowStencil=False,
-    monitor='testMonitor', color=[0,0,0], colorSpace='rgb',
+    monitor='testMonitor', color=[0,0,0], colorSpace='rgb', #color=[0,0,0]
     blendMode='avg', useFBO=True, 
     units='height')
 # store frame rate of monitor if we can measure it
@@ -90,7 +90,7 @@ text = visual.TextStim(win=win, name='text',
     text='Yusuke\'s first Psychopy\n\nPress "space" key to continue\n',
     font='Open Sans',
     pos=(0, 0), height=0.1, wrapWidth=None, ori=0.0, 
-    color='white', colorSpace='rgb', opacity=None, 
+    color='black', colorSpace='rgb', opacity=None, 
     languageStyle='LTR',
     depth=0.0);
 key_resp = keyboard.Keyboard()
@@ -102,17 +102,17 @@ trialClock = core.Clock()
 # Initialize components for Routine "survey1_3"
 survey1_3Clock = core.Clock()
 survey1 = visual.TextStim(win=win, name='survey1',
-    text='How many dots dit you see?',
+    text='How many dots dit you see? Only type digits',
     font='Open Sans',
-    pos=(0, 0.4), height=0.1, wrapWidth=None, ori=0.0, 
-    color='white', colorSpace='rgb', opacity=None, 
+    pos=(0, 0.35), height=0.1, wrapWidth=None, ori=0.0, 
+    color='black', colorSpace='rgb', opacity=None, 
     languageStyle='LTR',
     depth=0.0);
 textbox = visual.TextBox2(
      win, text='', font='Open Sans',
      pos=(0, 0),     letterHeight=0.05,
      size=(None, None), borderWidth=2.0,
-     color='white', colorSpace='rgb',
+     color='black', colorSpace='rgb',
      opacity=None,
      bold=False, italic=False,
      lineSpacing=1.0,
@@ -125,12 +125,12 @@ textbox = visual.TextBox2(
      autoLog=True,
 )
 button = visual.ButtonStim(win, 
-    text='Next trial', font='Arvo',
+    text='Click here to go to next trial', font='Arvo',
     pos=(0, -0.3),
     letterHeight=0.05,
     size=None, borderWidth=0.0,
-    fillColor='darkgrey', borderColor=None,
-    color='white', colorSpace='rgb',
+    fillColor=None, borderColor=None,
+    color='black', colorSpace='rgb',
     opacity=None,
     bold=True, italic=False,
     padding=None,
@@ -240,7 +240,7 @@ trialClock = core.Clock()
 
 # set up handler to look after randomisation of conditions etc
 #yusuke editting this
-trials = data.TrialHandler(nReps=len(files), #method='random', 
+trials = data.TrialHandler(nReps=len(files) + 4, #method='random', 
     extraInfo=expInfo, originPath=-1,
     trialList=[None],
     seed=None, name='trials')
@@ -259,7 +259,7 @@ for thisTrial in trials:
     win=win,
     name='image', 
     image= 'data/' + files[i], mask=None,
-    ori=0.0, pos=(0, 0), size=(0.5, 0.5),
+    ori=0.0, pos=(0, 0), size=(1, 1), #input image is square?
     color=[1,1,1], colorSpace='rgb', opacity=None,
     flipHoriz=False, flipVert=False,
     texRes=128.0, interpolate=True, depth=0.0)
@@ -437,22 +437,26 @@ for thisTrial in trials:
     for thisComponent in survey1_3Components:
         if hasattr(thisComponent, "setAutoDraw"):
             thisComponent.setAutoDraw(False)
+    textbox.text = "".join(ch for ch in textbox.text if ch in ['0','1','2','3','4','5','6','7','8','9'])
     trials.addData('textbox.text',textbox.text)
     trials.addData('textbox.started', textbox.tStartRefresh)
-    trials.addData('textbox.stopped', textbox.tStopRefresh)
+    #trials.addData('textbox.stopped', textbox.tStopRefresh)
+
+    
+    name = files[i].rsplit('.',1)[0]
+    trials.addData('actual_dots',name)
+    
     # the Routine "survey1_3" was not non-slip safe, so reset the non-slip timer
     routineTimer.reset()
     thisExp.nextEntry()
     
-    name = files[i].rsplit('.',1)[0]
+    # check the textbox response and change the difficulty of the experiment 
     if textbox.text == name:
         if i < len(files) -1:
             i = i + 1
     else:
         if i > 0:
             i = i -1
-difficulty = [1,2,4,8,16,32,64,128]
-print(difficulty[i])
 # completed a loop of repeats of 'trials'
 
 
@@ -462,7 +466,7 @@ win.flip()
 
 # these shouldn't be strictly necessary (should auto-save)
 thisExp.saveAsWideText(filename+'.csv', delim='auto')
-thisExp.saveAsPickle(filename)
+#thisExp.saveAsPickle(filename) # not save .psydat
 logging.flush()
 # make sure everything is closed down
 thisExp.abort()  # or data files will save again on exit
