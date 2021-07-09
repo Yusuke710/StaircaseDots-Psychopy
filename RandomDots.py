@@ -68,7 +68,7 @@ frameTolerance = 0.001  # how close to onset before 'same' frame
 win = visual.Window(
     size=(1800, 1200), fullscr=True, screen=0, 
     winType='pyglet', allowGUI=False, allowStencil=False,
-    monitor='testMonitor', color=[0,0,0], colorSpace='rgb', #color=[0,0,0]
+    monitor='testMonitor', color='white', colorSpace='rgb', #color=[0,0,0]
     blendMode='avg', useFBO=True, 
     units='height')
 # store frame rate of monitor if we can measure it
@@ -234,7 +234,19 @@ from os.path import isfile, join
 mypath = 'data'
 files = [f for f in listdir(mypath) if isfile(join(mypath, f))]
 print(files)
+#bubble sort
+n = len(files)
+for i in range(n):
+    for j in range(0,n-i-1):
+        num1 = files[j].rsplit('.',1)[0]
+        num2 = files[j+1].rsplit('.',1)[0]
+        if int(num1)>int(num2):
+            temp = files[j]
+            files[j]=files[j+1]
+            files[j+1]=temp
+print(files)
 
+name = files[i].rsplit('.',1)[0]
 # Initialize components for Routine "trial"
 trialClock = core.Clock()
 
